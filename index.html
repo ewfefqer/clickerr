@@ -3,16 +3,179 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Ultra Clicker</title>
 
-<link rel="stylesheet" href="style.css">
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
+
+body{
+    background:linear-gradient(135deg,#111,#1d1d1d,#2b2b2b);
+    color:white;
+    min-height:100vh;
+    overflow-x:hidden;
+}
+
+header{
+    width:100%;
+    padding:25px;
+    text-align:center;
+    font-size:35px;
+    font-weight:bold;
+    background:rgba(0,0,0,0.3);
+    box-shadow:0 0 20px rgba(0,0,0,0.5);
+}
+
+.container{
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    gap:40px;
+    padding:40px;
+    flex-wrap:wrap;
+}
+
+.click-area{
+    width:420px;
+    background:rgba(255,255,255,0.05);
+    border-radius:25px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 0 25px rgba(0,0,0,0.5);
+}
+
+.score{
+    font-size:55px;
+    margin:20px 0;
+    font-weight:bold;
+}
+
+.per-second{
+    color:#bbb;
+    margin-bottom:20px;
+}
+
+.click-btn{
+    width:240px;
+    height:240px;
+    border-radius:50%;
+    border:none;
+    cursor:pointer;
+    font-size:32px;
+    font-weight:bold;
+    color:white;
+    background:linear-gradient(145deg,#00bfff,#005eff);
+    transition:0.1s;
+    box-shadow:0 0 40px #008cff;
+}
+
+.click-btn:hover{
+    transform:scale(1.05);
+}
+
+.click-btn:active{
+    transform:scale(0.95);
+}
+
+.shop{
+    width:450px;
+    background:rgba(255,255,255,0.05);
+    border-radius:25px;
+    padding:25px;
+    box-shadow:0 0 25px rgba(0,0,0,0.5);
+}
+
+.shop h2{
+    margin-bottom:20px;
+    text-align:center;
+    font-size:30px;
+}
+
+.upgrade{
+    background:rgba(255,255,255,0.08);
+    padding:18px;
+    border-radius:18px;
+    margin-bottom:15px;
+    transition:0.2s;
+}
+
+.upgrade:hover{
+    background:rgba(255,255,255,0.12);
+}
+
+.upgrade button{
+    margin-top:12px;
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:18px;
+    font-weight:bold;
+    color:white;
+    background:linear-gradient(90deg,#00c853,#00e676);
+}
+
+.upgrade button:hover{
+    opacity:0.9;
+}
+
+.stats{
+    margin-top:25px;
+    background:rgba(255,255,255,0.06);
+    padding:20px;
+    border-radius:20px;
+}
+
+.reset{
+    margin-top:20px;
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:15px;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    color:white;
+    background:linear-gradient(90deg,#ff1744,#ff5252);
+}
+
+.floating{
+    position:absolute;
+    color:#00e5ff;
+    font-size:28px;
+    font-weight:bold;
+    pointer-events:none;
+    animation:floatUp 1s forwards;
+}
+
+@keyframes floatUp{
+    0%{
+        opacity:1;
+        transform:translateY(0);
+    }
+    100%{
+        opacity:0;
+        transform:translateY(-120px);
+    }
+}
+
+footer{
+    text-align:center;
+    padding:20px;
+    color:#999;
+}
+</style>
 </head>
 
 <body>
 
 <header>
-    CLICKER
+    ⚡ ULTRA CLICKER ⚡
 </header>
 
 <div class="container">
@@ -42,8 +205,8 @@
         <h2>🛒 Магазин</h2>
 
         <div class="upgrade">
-            <h3>     Улучшение клика</h3>
-            <p>+1 за клик</p>
+            <h3>💪 Улучшение клика</h3>
+            <p>+1 к силе клика</p>
             <p>Цена: <span id="clickUpgradeCost">50</span></p>
             <button onclick="buyClickUpgrade()">
                 Купить
@@ -51,7 +214,7 @@
         </div>
 
         <div class="upgrade">
-            <h3> Автокликер</h3>
+            <h3>🤖 Автокликер</h3>
             <p>+1 в секунду</p>
             <p>Цена: <span id="autoCost">100</span></p>
             <button onclick="buyAuto()">
@@ -60,7 +223,7 @@
         </div>
 
         <div class="upgrade">
-            <h3> Клик за кликом</h3>
+            <h3>🏭 Фабрика</h3>
             <p>+10 в секунду</p>
             <p>Цена: <span id="factoryCost">1000</span></p>
             <button onclick="buyFactory()">
@@ -69,7 +232,7 @@
         </div>
 
         <div class="upgrade">
-            <h3> Куда уж больше</h3>
+            <h3>🚀 Ракетная станция</h3>
             <p>+50 в секунду</p>
             <p>Цена: <span id="rocketCost">5000</span></p>
             <button onclick="buyRocket()">
@@ -86,10 +249,173 @@
 </div>
 
 <footer>
-    Сделано с любовью 
+    Сделано на HTML + CSS + JavaScript
 </footer>
 
-<script src="script.js"></script>
+<script>
+
+let score = 0;
+let clickPower = 1;
+let perSecond = 0;
+let totalClicks = 0;
+
+let clickUpgradeCost = 50;
+let autoCost = 100;
+let factoryCost = 1000;
+let rocketCost = 5000;
+
+const scoreEl = document.getElementById("score");
+const perSecondEl = document.getElementById("perSecond");
+const clickPowerEl = document.getElementById("clickPower");
+const totalClicksEl = document.getElementById("totalClicks");
+
+function updateUI(){
+
+    scoreEl.innerText = Math.floor(score);
+
+    perSecondEl.innerText = perSecond;
+
+    clickPowerEl.innerText = clickPower;
+
+    totalClicksEl.innerText = totalClicks;
+
+    document.getElementById("clickUpgradeCost").innerText = clickUpgradeCost;
+
+    document.getElementById("autoCost").innerText = autoCost;
+
+    document.getElementById("factoryCost").innerText = factoryCost;
+
+    document.getElementById("rocketCost").innerText = rocketCost;
+
+}
+
+document.getElementById("clickBtn").addEventListener("click",(e)=>{
+
+    score += clickPower;
+
+    totalClicks++;
+
+    createFloatingText(e.clientX,e.clientY,"+" + clickPower);
+
+    updateUI();
+
+});
+
+function createFloatingText(x,y,text){
+
+    const div = document.createElement("div");
+
+    div.className = "floating";
+
+    div.innerText = text;
+
+    div.style.left = x + "px";
+
+    div.style.top = y + "px";
+
+    document.body.appendChild(div);
+
+    setTimeout(()=>{
+        div.remove();
+    },1000);
+
+}
+
+function buyClickUpgrade(){
+
+    if(score >= clickUpgradeCost){
+
+        score -= clickUpgradeCost;
+
+        clickPower++;
+
+        clickUpgradeCost = Math.floor(clickUpgradeCost * 1.7);
+
+        updateUI();
+
+    }
+
+}
+
+function buyAuto(){
+
+    if(score >= autoCost){
+
+        score -= autoCost;
+
+        perSecond += 1;
+
+        autoCost = Math.floor(autoCost * 1.8);
+
+        updateUI();
+
+    }
+
+}
+
+function buyFactory(){
+
+    if(score >= factoryCost){
+
+        score -= factoryCost;
+
+        perSecond += 10;
+
+        factoryCost = Math.floor(factoryCost * 2);
+
+        updateUI();
+
+    }
+
+}
+
+function buyRocket(){
+
+    if(score >= rocketCost){
+
+        score -= rocketCost;
+
+        perSecond += 50;
+
+        rocketCost = Math.floor(rocketCost * 2.5);
+
+        updateUI();
+
+    }
+
+}
+
+function resetGame(){
+
+    if(confirm("Точно сбросить прогресс?")){
+
+        score = 0;
+        clickPower = 1;
+        perSecond = 0;
+        totalClicks = 0;
+
+        clickUpgradeCost = 50;
+        autoCost = 100;
+        factoryCost = 1000;
+        rocketCost = 5000;
+
+        updateUI();
+
+    }
+
+}
+
+setInterval(()=>{
+
+    score += perSecond / 10;
+
+    updateUI();
+
+},100);
+
+updateUI();
+
+</script>
 
 </body>
 </html>
