@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ultra Clicker</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    CLICKER
+</header>
+
+<div class="container">
+
+    <div class="click-area">
+
+        <div class="score" id="score">0</div>
+
+        <div class="per-second">
+            В секунду: <span id="perSecond">0</span>
+        </div>
+
+        <button class="click-btn" id="clickBtn">
+            CLICK
+        </button>
+
+        <div class="stats">
+            <h3>Статистика</h3>
+            <p>Сила клика: <span id="clickPower">1</span></p>
+            <p>Всего кликов: <span id="totalClicks">0</span></p>
+        </div>
+
+    </div>
+
+    <div class="shop">
+
+        <h2>🛒 Магазин</h2>
+
+        <div class="upgrade">
+            <h3>     Улучшение клика</h3>
+            <p>+1 за клик</p>
+            <p>Цена: <span id="clickUpgradeCost">50</span></p>
+            <button onclick="buyClickUpgrade()">
+                Купить
+            </button>
+        </div>
+
+        <div class="upgrade">
+            <h3> Автокликер</h3>
+            <p>+1 в секунду</p>
+            <p>Цена: <span id="autoCost">100</span></p>
+            <button onclick="buyAuto()">
+                Купить
+            </button>
+        </div>
+
+        <div class="upgrade">
+            <h3> Клик за кликом</h3>
+            <p>+10 в секунду</p>
+            <p>Цена: <span id="factoryCost">1000</span></p>
+            <button onclick="buyFactory()">
+                Купить
+            </button>
+        </div>
+
+        <div class="upgrade">
+            <h3> Куда уж больше</h3>
+            <p>+50 в секунду</p>
+            <p>Цена: <span id="rocketCost">5000</span></p>
+            <button onclick="buyRocket()">
+                Купить
+            </button>
+        </div>
+
+        <button class="reset" onclick="resetGame()">
+            Сбросить прогресс
+        </button>
+
+    </div>
+
+</div>
+
+<footer>
+    Сделано с любовью 
+</footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
